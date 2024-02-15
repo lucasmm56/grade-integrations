@@ -1,0 +1,27 @@
+version: '3'
+services:
+  mysql-professores:
+    image: 'mysql:8.0'
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=professores
+    ports:
+      - '3306:3306'
+    networks:
+      - professores-network
+  professores:
+    image: lucasmm56/professores-disponibilidades
+    restart: always
+    build: .
+    ports:
+      - "80:80"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-professores:3306/professores
+    depends_on:
+      - mysql-professores
+    networks:
+      - professores-network
+networks:
+  professores-network:
+    driver: bridge

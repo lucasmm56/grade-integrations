@@ -1,0 +1,38 @@
+server:
+  servlet:
+    context-path: /api
+  port: 80
+
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/professores
+    username: root
+    password:
+    hikari:
+      maximum-pool-size: 10
+      idle-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  mvc:
+    locale: pt_BR
+    path match:
+      matching-strategy: ANT_PATH_MATCHER
+  messages:
+    encoding: UTF-8
+    basename:
+  config:
+    import: optional:file:.env[.properties]
+  flyway:
+    enabled: true
+    locations: classpath:db/migrations
+  docker:
+    compose:
+      file: ./professores-disponibilidades/compose.yaml
+
+flyway:
+  url: jdbc:mysql://localhost:3306/professores
+  user: root
+  password:
