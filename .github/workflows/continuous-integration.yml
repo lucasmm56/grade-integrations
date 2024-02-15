@@ -27,11 +27,11 @@ jobs:
         cache: maven
         
     - name: Build Application JAR 
-      working-directory: ./grade-horaria/professores-disponibilidades
+      working-directory: ./grade-integrations/professores-disponibilidades
       run: mvn clean package
 
     - name: Docker Compose Build
-      working-directory: ./grade-horaria/professores-disponibilidades
+      working-directory: ./grade-integrations/professores-disponibilidades
       run: docker compose build
 
     - name: Push to Docker Hub Container Registry
