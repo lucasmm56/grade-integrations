@@ -1,7 +1,5 @@
 server:
   port: 8888
-file:
-  upload-dir: /home/runner/work/professores-disponibilidades/UploadDir
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
