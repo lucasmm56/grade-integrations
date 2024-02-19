@@ -13,7 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/disponibilidades")
 public class DisponibilidadeController {
+    private DisponibilidadeService disponibilidadeService;
 
+    public DisponibilidadeController(DisponibilidadeService disponibilidadeService){
+        this.disponibilidadeService = disponibilidadeService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DisponibilidadeCreateResponseDTO>> listDisponibilidades(){
