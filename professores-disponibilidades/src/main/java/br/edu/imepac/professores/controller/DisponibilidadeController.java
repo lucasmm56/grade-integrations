@@ -14,9 +14,6 @@ import java.util.List;
 @RequestMapping("/disponibilidades")
 public class DisponibilidadeController {
 
-    @Autowired
-    private DisponibilidadeService disponibilidadeService;
-
 
     @GetMapping
     public ResponseEntity<List<DisponibilidadeCreateResponseDTO>> listDisponibilidades(){
