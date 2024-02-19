@@ -9,7 +9,6 @@ import br.edu.imepac.professores.models.repository.DisponibilidadeRepository;
 import br.edu.imepac.professores.models.repository.ProfessorRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +17,14 @@ import java.util.List;
 @Service
 @Slf4j
 public class DisponibilidadeService {
-
-    @Autowired
     private DisponibilidadeRepository disponibilidadeRepository;
 
-    @Autowired
     private ProfessorRepository professorRepository;
 
+    public DisponibilidadeService(DisponibilidadeRepository disponibilidadeRepository, ProfessorRepository professorService){
+        this.disponibilidadeRepository = disponibilidadeRepository;
+        this.professorRepository = professorService;
+    }
 
 
     public DisponibilidadeCreateResponseDTO cadastrarDisponibilidade(DisponibilidadeRequestDTO requestDTO) {
