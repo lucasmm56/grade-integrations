@@ -4,7 +4,6 @@ import br.edu.imepac.professores.dto.request.ProfessorRequestDTO;
 import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import br.edu.imepac.professores.models.services.ProfessorService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/professores")
 public class ProfessorController {
-
-    @Autowired
     private ProfessorService professorService;
+
+    public ProfessorController(ProfessorService professorService){
+        this.professorService = professorService;
+    }
 
     @PostMapping
     public ResponseEntity<ProfessorResponseDTO> saveTeacher(@Valid @RequestBody ProfessorRequestDTO professorRequestDTO){
