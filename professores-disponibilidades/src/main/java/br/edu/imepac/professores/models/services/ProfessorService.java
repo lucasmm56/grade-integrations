@@ -14,9 +14,11 @@ import java.util.List;
 
 @Service
 public class ProfessorService {
-
-    @Autowired
     private ProfessorRepository professorRepository;
+
+    public ProfessorService(ProfessorRepository professorRepository){
+        this.professorRepository = professorRepository;
+    }
 
     public ProfessorResponseDTO cadastrarProfessor(ProfessorRequestDTO requestDTO) {
         Professor professor = new Professor();
