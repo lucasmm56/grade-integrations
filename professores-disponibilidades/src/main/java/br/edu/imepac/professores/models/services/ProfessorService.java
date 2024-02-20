@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfessorService {
@@ -33,6 +34,24 @@ public class ProfessorService {
         responseDTO.setEmail(savedProfessor.getEmail());
 
         return responseDTO;
+    }
+
+    public ProfessorResponseDTO editarProfessor(Long id, ProfessorRequestDTO professorRequestDTO){
+        Optional<Professor> optionalProfessor = Optional.ofNullable(this.findById(id));
+        if(optionalProfessor.isPresent()){
+            Professor professor = optionalProfessor.get();
+            professor.setNome(professorRequestDTO.getNome());
+            professor.setEmail(professorRequestDTO.getEmail());
+
+            Professor savedProfessor = professorRepository.save(professor);
+            ProfessorResponseDTO responseDTO = new ProfessorResponseDTO();
+            responseDTO.setId(savedProfessor.getId());
+            responseDTO.setNome(savedProfessor.getNome());
+            responseDTO.setEmail(savedProfessor.getEmail());
+            return responseDTO;
+        }else{
+            throw new EntityNotFoundException("Professor não encontrado com id" + id +" !");
+        }
     }
 
     public List<ProfessorResponseDTO> listarProfessores() {

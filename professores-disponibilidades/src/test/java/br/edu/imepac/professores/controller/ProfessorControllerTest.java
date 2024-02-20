@@ -56,6 +56,32 @@ class ProfessorControllerTest {
     }
 
     @Test
+    void testUpdateTeacher() throws Exception {
+        // Criação de um objeto ProfessorRequestDTO com dados válidos para atualização
+        ProfessorRequestDTO requestDTO = new ProfessorRequestDTO();
+        requestDTO.setNome("John Doe");
+        requestDTO.setEmail("johndoe@example.com");
+
+        // Criação de um objeto ProfessorResponseDTO com dados esperados após a atualização
+        ProfessorResponseDTO expectedResponseDTO = new ProfessorResponseDTO();
+        expectedResponseDTO.setId(1L);
+        expectedResponseDTO.setNome("John Doe");
+        expectedResponseDTO.setEmail("johndoe@example.com");
+
+        // Configuração do comportamento do mock do serviço para retornar o objeto ProfessorResponseDTO esperado
+        when(professorService.editarProfessor(1L, requestDTO)).thenReturn(expectedResponseDTO);
+
+        // Execução da requisição PUT para atualizar o professor
+        mockMvc.perform(MockMvcRequestBuilders.put("/professores/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(requestDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.nome").value("John Doe"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("johndoe@example.com"));
+    }
+
+    @Test
      void testListProfessores() throws Exception {
         // Criação de uma lista de ProfessorResponseDTO com dados esperados
         List<ProfessorResponseDTO> expectedProfessores = new ArrayList<>();

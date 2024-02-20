@@ -3,6 +3,7 @@ package br.edu.imepac.professores.controller;
 import br.edu.imepac.professores.dto.request.ProfessorRequestDTO;
 import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import br.edu.imepac.professores.models.services.ProfessorService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,12 @@ public class ProfessorController {
     public ResponseEntity<List<ProfessorResponseDTO>> listProfessores(){
         List<ProfessorResponseDTO> professores = professorService.listarProfessores();
         return ResponseEntity.ok(professores);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProfessorResponseDTO> updateTeacher(@PathVariable Long id, @Valid @RequestBody ProfessorRequestDTO professorRequestDTO) {
+            ProfessorResponseDTO professorResponseDTO = professorService.editarProfessor(id, professorRequestDTO);
+            return ResponseEntity.ok(professorResponseDTO);
     }
 
     @GetMapping("/{id}")

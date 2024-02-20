@@ -35,6 +35,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
     private static ProfessorRequestDTO professorRequest;
 
     private static Professor professor;
+    private static Professor professorUpdated;
     private static List<Disponibilidade> disponibilidades;
 
     private Long professorId;
@@ -56,7 +57,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
 
          disponibilidades = new ArrayList<>();
         professor = new Professor(1L, "Lucas", "lucas@gmail.com", disponibilidades );
-
+        professorUpdated = new Professor(1L, "Lucas Updated", "lucas_updated@gmail.com", disponibilidades );
         professorRequest = new ProfessorRequestDTO("Lucas", "lucas@gmail.com");
     }
 
@@ -84,6 +85,29 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
 
     @Test
     @Order(2)
+    void integrationTestGivenProfessorObject_when_Update_ShouldReturnUpdatedProfessor() {
+        ProfessorRequestDTO updatedProfessorRequest = new ProfessorRequestDTO("Lucas Updated", "lucas_updated@gmail.com");
+
+        var response = given().spec(specification)
+                .pathParam("id", professor.getId())
+                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .body(updatedProfessorRequest)
+                .when()
+                .put("{id}")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .as(ProfessorResponseDTO.class);
+
+        assertNotNull(response);
+        assertEquals(professor.getId(), response.getId());
+        assertEquals(updatedProfessorRequest.getNome(), response.getNome());
+        assertEquals(updatedProfessorRequest.getEmail(), response.getEmail());
+    }
+
+    @Test
+    @Order(3)
     void integrationTestGivenProfessorObject_when_findById_thenReturnAProfessorObject(){
         var response = given().spec(specification)
                 .pathParam("id", professor.getId())
@@ -96,14 +120,14 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
                 .as(ProfessorResponseDTO.class);
 
         assertNotNull(response);
-        assertEquals(professor.getId(), response.getId());
-        assertEquals(professor.getNome(), response.getNome());
-        assertEquals(professor.getEmail(), response.getEmail());
-        assertEquals(professor.getDisponibilidades(), response.getDisponibilidades());
+        assertEquals(professorUpdated.getId(), response.getId());
+        assertEquals(professorUpdated.getNome(), response.getNome());
+        assertEquals(professorUpdated.getEmail(), response.getEmail());
+        assertEquals(professorUpdated.getDisponibilidades(), response.getDisponibilidades());
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     void itegrationTestGivenListAllProfessores_when_findAll_thenReturnAllList(){
         ProfessorRequestDTO anotherProfessor = new ProfessorRequestDTO("Ana", "ana@gmail.com");
 
@@ -134,7 +158,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
 
 
     @Test
-    @Order(4)
+    @Order(5)
     void integrationTestGivenProfessorObject_when_delete_ShouldReturnNoContent(){
         given().spec(specification)
                 .pathParam("id", professor.getId())
@@ -143,4 +167,6 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
                 .then()
                 .statusCode(204);
     }
+
+
 }
