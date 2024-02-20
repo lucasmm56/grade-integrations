@@ -58,6 +58,38 @@ class ProfessorServiceTest {
     }
 
     @Test
+    void testEditarProfessor() {
+        // Criação do objeto de requisição
+        ProfessorRequestDTO requestDTO = new ProfessorRequestDTO();
+        requestDTO.setNome("John Doe");
+        requestDTO.setEmail("johndoe@example.com");
+
+        // Criação do objeto de professor existente
+        Professor existingProfessor = new Professor();
+        existingProfessor.setId(1L);
+        existingProfessor.setNome("Existing Professor");
+        existingProfessor.setEmail("existingprof@example.com");
+
+        // Simulação do comportamento do repositório ao encontrar o professor existente
+        when(professorRepository.findById(1L)).thenReturn(Optional.of(existingProfessor));
+
+        // Simulação do comportamento do repositório ao salvar o professor atualizado
+        when(professorRepository.save(Mockito.any(Professor.class))).thenAnswer(invocation -> {
+            Professor updatedProfessor = invocation.getArgument(0);
+            updatedProfessor.setId(existingProfessor.getId()); // Mantém o mesmo ID
+            return updatedProfessor;
+        });
+
+        // Execução do método editarProfessor
+        ProfessorResponseDTO responseDTO = professorService.editarProfessor(1L, requestDTO);
+
+        // Verificação dos resultados
+        assertEquals(existingProfessor.getId(), responseDTO.getId());
+        assertEquals(requestDTO.getNome(), responseDTO.getNome());
+        assertEquals(requestDTO.getEmail(), responseDTO.getEmail());
+    }
+
+    @Test
     void testListarProfessores() {
         // Criação de uma lista de professores fictícia
         List<Professor> professores = new ArrayList<>();
