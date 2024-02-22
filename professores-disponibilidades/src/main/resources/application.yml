@@ -17,7 +17,6 @@ spring:
       ddl-auto: none
     show-sql: true
   mvc:
-    locale: pt_BR
     path match:
       matching-strategy: ANT_PATH_MATCHER
   messages:
@@ -31,6 +30,14 @@ spring:
   docker:
     compose:
       file: ./professores-disponibilidades/compose.yaml
+  web:
+    locale: pt_BR
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/imepac
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
 flyway:
   url: jdbc:mysql://localhost:3306/professores

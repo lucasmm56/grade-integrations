@@ -9,6 +9,7 @@
     <module>professores-disponibilidades</module>
     <module>grade-curricular</module>
     <module>disciplinas-cursos</module>
+    <module>gateway</module>
   </modules>
   <name>Archetype - grade-horaria</name>
   <url>http://maven.apache.org</url>
