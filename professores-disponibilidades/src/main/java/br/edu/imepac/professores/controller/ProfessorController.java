@@ -7,6 +7,7 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +22,14 @@ public class ProfessorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProfessorResponseDTO> saveTeacher(@Valid @RequestBody ProfessorRequestDTO professorRequestDTO){
         ProfessorResponseDTO professorResponseDTO = professorService.cadastrarProfessor(professorRequestDTO);
         return new ResponseEntity<>(professorResponseDTO, HttpStatus.CREATED);
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ProfessorResponseDTO>> listProfessores(){
         List<ProfessorResponseDTO> professores = professorService.listarProfessores();
         return ResponseEntity.ok(professores);
