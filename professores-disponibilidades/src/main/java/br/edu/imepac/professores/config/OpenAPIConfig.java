@@ -13,7 +13,7 @@ public class OpenAPIConfig {
     OpenAPI customOpenAPI(){
         return new OpenAPI()
                 .info(new Info()
-                        .title("Hello Swagger OpenAPI")
+                        .title("Hello Swagger UI OpenAPI")
                         .version("v1")
                         .description("Some description about your API.")
                         .termsOfService("")

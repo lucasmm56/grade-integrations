@@ -6,6 +6,7 @@
       <directory url="file://$PROJECT_DIR$/professores-disponibilidades/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/grade-curricular/src/main/resources/archetype-resources" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/disciplinas-cursos/src/main/resources/archetype-resources" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/gateway/src/main/resources/archetype-resources" includeSubdirectories="true" />
     </excludeFromCompile>
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
@@ -15,6 +16,7 @@
         <module name="disciplinas-cursos" />
         <module name="professores-disponibilidades" />
         <module name="grade-curricular" />
+        <module name="gateway" />
         <module name="professores" />
       </profile>
     </annotationProcessing>

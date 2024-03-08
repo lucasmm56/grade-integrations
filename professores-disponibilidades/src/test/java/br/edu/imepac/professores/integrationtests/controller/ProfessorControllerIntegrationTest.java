@@ -2,16 +2,22 @@ package br.edu.imepac.professores.integrationtests.controller;
 
 
 import br.edu.imepac.professores.config.TestConfigs;
+import br.edu.imepac.professores.controller.TokenController;
 import br.edu.imepac.professores.dto.request.ProfessorRequestDTO;
 import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import br.edu.imepac.professores.integrationtests.testescontainers.AbstractIntegrationTest;
 import br.edu.imepac.professores.models.entities.Disponibilidade;
 import br.edu.imepac.professores.models.entities.Professor;
+import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.DeserializationFeature;
@@ -26,6 +32,7 @@ import static org.junit.Assert.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Slf4j
 public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
@@ -40,6 +47,8 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
 
     private Long professorId;
 
+    private static final String BASE_URL = "http://localhost"; // Sua URL base da API
+    private static String token;
 
 
     @BeforeAll
@@ -59,12 +68,24 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
         professor = new Professor(1L, "Lucas", "lucas@gmail.com", disponibilidades );
         professorUpdated = new Professor(1L, "Lucas Updated", "lucas_updated@gmail.com", disponibilidades );
         professorRequest = new ProfessorRequestDTO("Lucas", "lucas@gmail.com");
+
+        String token = given()
+                .contentType(ContentType.URLENC.withCharset("UTF-8"))
+                .formParam("client_id", "app_professores")
+                .formParam("username", "admin_professor")
+                .formParam("password", "admin")
+                .formParam("grant_type", "password")
+                .when()
+                .post("http://localhost/api/token")
+                .then()
+                .extract().path("access_token");
     }
 
     @Test
     @Order(1)
     void integrationTestGivenProfessorObject_when_CreateOneTeacher_ShouldReturnAProfessorObject(){
         var response = given().spec(specification)
+                //.header("Authorization", "Bearer " + token)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
                 .body(professorRequest)
                 .when()
@@ -89,6 +110,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
         ProfessorRequestDTO updatedProfessorRequest = new ProfessorRequestDTO("Lucas Updated", "lucas_updated@gmail.com");
 
         var response = given().spec(specification)
+                //.header("Authorization", "Bearer " + token)
                 .pathParam("id", professor.getId())
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
                 .body(updatedProfessorRequest)
@@ -110,6 +132,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
     @Order(3)
     void integrationTestGivenProfessorObject_when_findById_thenReturnAProfessorObject(){
         var response = given().spec(specification)
+                //.header("Authorization", "Bearer " + token)
                 .pathParam("id", professor.getId())
                 .when()
                 .get("{id}")
@@ -132,6 +155,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
         ProfessorRequestDTO anotherProfessor = new ProfessorRequestDTO("Ana", "ana@gmail.com");
 
         given().spec(specification)
+                //.header("Authorization", "Bearer " + token)
                 .contentType(TestConfigs.CONTENT_TYPE_JSON)
                 .body(anotherProfessor)
                 .when()
@@ -161,6 +185,7 @@ public class ProfessorControllerIntegrationTest extends AbstractIntegrationTest 
     @Order(5)
     void integrationTestGivenProfessorObject_when_delete_ShouldReturnNoContent(){
         given().spec(specification)
+                //.header("Authorization", "Bearer " + token)
                 .pathParam("id", professor.getId())
                 .when()
                 .delete("{id}")

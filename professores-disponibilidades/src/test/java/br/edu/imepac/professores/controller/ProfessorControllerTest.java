@@ -2,7 +2,7 @@ package br.edu.imepac.professores.controller;
 
 import br.edu.imepac.professores.dto.request.ProfessorRequestDTO;
 import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
-import br.edu.imepac.professores.models.services.ProfessorService;
+import br.edu.imepac.professores.models.services.interfaces.TeacherService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.mockito.Mockito.when;
 
@@ -27,7 +27,7 @@ class ProfessorControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProfessorService professorService;
+    private TeacherService teacherService;
 
     @Test
      void testSaveTeacher() throws Exception {
@@ -43,10 +43,11 @@ class ProfessorControllerTest {
         expectedResponseDTO.setEmail("johndoe@example.com");
 
         // Configuração do comportamento do mock do serviço para retornar o objeto ProfessorResponseDTO esperado
-        when(professorService.cadastrarProfessor(requestDTO)).thenReturn(expectedResponseDTO);
+        when(teacherService.createTeacher(requestDTO)).thenReturn(expectedResponseDTO);
 
         // Execução da requisição POST para salvar o professor
         mockMvc.perform(MockMvcRequestBuilders.post("/professores")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -69,10 +70,11 @@ class ProfessorControllerTest {
         expectedResponseDTO.setEmail("johndoe@example.com");
 
         // Configuração do comportamento do mock do serviço para retornar o objeto ProfessorResponseDTO esperado
-        when(professorService.editarProfessor(1L, requestDTO)).thenReturn(expectedResponseDTO);
+        when(teacherService.updateTeacher(1L, requestDTO)).thenReturn(expectedResponseDTO);
 
         // Execução da requisição PUT para atualizar o professor
         mockMvc.perform(MockMvcRequestBuilders.put("/professores/1")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -97,10 +99,11 @@ class ProfessorControllerTest {
         expectedProfessores.add(professor2);
 
         // Configuração do comportamento do mock do serviço para retornar a lista de ProfessorResponseDTO esperada
-        when(professorService.listarProfessores()).thenReturn(expectedProfessores);
+        when(teacherService.listTeachers()).thenReturn(expectedProfessores);
 
         // Execução da requisição GET para listar os professores
         mockMvc.perform(MockMvcRequestBuilders.get("/professores")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
@@ -117,10 +120,11 @@ class ProfessorControllerTest {
         List<ProfessorResponseDTO> expectedProfessores = new ArrayList<>();
 
         // Configuração do comportamento do mock do serviço para retornar a lista vazia
-        when(professorService.listarProfessores()).thenReturn(expectedProfessores);
+        when(teacherService.listTeachers()).thenReturn(expectedProfessores);
 
         // Execução da requisição GET para listar os professores
         mockMvc.perform(MockMvcRequestBuilders.get("/professores")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
@@ -135,6 +139,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição POST para salvar o professor
         mockMvc.perform(MockMvcRequestBuilders.post("/professores")
+                       .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());

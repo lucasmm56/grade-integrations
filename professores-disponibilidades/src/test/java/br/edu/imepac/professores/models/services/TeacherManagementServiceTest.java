@@ -23,13 +23,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ProfessorServiceTest {
+class TeacherManagementServiceTest {
 
     @Mock
     private ProfessorRepository professorRepository;
 
     @InjectMocks
-    private ProfessorService professorService;
+    private TeacherManagementService teacherService;
 
 
     @Test
@@ -49,7 +49,7 @@ class ProfessorServiceTest {
         when(professorRepository.save(Mockito.any(Professor.class))).thenReturn(savedProfessor);
 
         // Execução do método cadastrarProfessor
-        ProfessorResponseDTO responseDTO = professorService.cadastrarProfessor(requestDTO);
+        ProfessorResponseDTO responseDTO = teacherService.createTeacher(requestDTO);
 
         // Verificação dos resultados
         assertEquals(savedProfessor.getId(), responseDTO.getId());
@@ -81,7 +81,7 @@ class ProfessorServiceTest {
         });
 
         // Execução do método editarProfessor
-        ProfessorResponseDTO responseDTO = professorService.editarProfessor(1L, requestDTO);
+        ProfessorResponseDTO responseDTO = teacherService.updateTeacher(1L, requestDTO);
 
         // Verificação dos resultados
         assertEquals(existingProfessor.getId(), responseDTO.getId());
@@ -110,7 +110,7 @@ class ProfessorServiceTest {
         when(professorRepository.findAll()).thenReturn(professores);
 
         // Execução do método listarProfessores
-        List<ProfessorResponseDTO> responseDTOs = professorService.listarProfessores();
+        List<ProfessorResponseDTO> responseDTOs = teacherService.listTeachers();
 
         // Verificação dos resultados
         assertEquals(1, responseDTOs.size());
@@ -135,7 +135,7 @@ class ProfessorServiceTest {
         when(professorRepository.findAll()).thenReturn(new ArrayList<>());
 
         // Execução do método listarProfessores
-        List<ProfessorResponseDTO> responseDTOs = professorService.listarProfessores();
+        List<ProfessorResponseDTO> responseDTOs = teacherService.listTeachers();
 
         // Verificação dos resultados
         assertEquals(0, responseDTOs.size());
@@ -152,7 +152,7 @@ class ProfessorServiceTest {
         when(professorRepository.save(Mockito.any(Professor.class))).thenThrow(new RuntimeException("Erro ao salvar professor"));
 
         // Execução do método cadastrarProfessor e verificação se uma exceção é lançada
-        assertThrows(RuntimeException.class, () -> professorService.cadastrarProfessor(requestDTO));
+        assertThrows(RuntimeException.class, () -> teacherService.createTeacher(requestDTO));
     }
 
     @Test
@@ -162,7 +162,7 @@ class ProfessorServiceTest {
         professor.setId(id);
 
         when(professorRepository.findById(id)).thenReturn(java.util.Optional.of(professor));
-        professorService.findById(id);
+        teacherService.findById(id);
         verify(professorRepository, times(1)).findById(id);
     }
 
@@ -173,7 +173,7 @@ class ProfessorServiceTest {
         String expectedMessage = "Professor não encontrado com id " + id +" !";
         //When
         when(professorRepository.findById(id)).thenThrow(new EntityNotFoundException(expectedMessage));
-        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class, () -> professorService.findById(id));
+        EntityNotFoundException actual = assertThrows(EntityNotFoundException.class, () -> teacherService.findTeacherById(id));
         //Then
         assertEquals(expectedMessage, actual.getMessage());
     }
@@ -186,7 +186,7 @@ class ProfessorServiceTest {
         professor.setId(id);
         //When & Then
         when(professorRepository.findById(id)).thenReturn(java.util.Optional.of(professor));
-        professorService.deleteTeacher(id);
+        teacherService.deleteTeacher(id);
         verify(professorRepository, times(1)).delete(professor);
     }
 }
