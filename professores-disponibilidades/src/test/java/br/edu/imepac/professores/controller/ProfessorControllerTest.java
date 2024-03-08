@@ -47,7 +47,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição POST para salvar o professor
         mockMvc.perform(MockMvcRequestBuilders.post("/professores")
-                        //.with(SecurityMockMvcRequestPostProcessors.jwt())
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -74,7 +74,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição PUT para atualizar o professor
         mockMvc.perform(MockMvcRequestBuilders.put("/professores/1")
-                       // .with(SecurityMockMvcRequestPostProcessors.jwt())
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -103,7 +103,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição GET para listar os professores
         mockMvc.perform(MockMvcRequestBuilders.get("/professores")
-                       // .with(SecurityMockMvcRequestPostProcessors.jwt())
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
@@ -124,7 +124,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição GET para listar os professores
         mockMvc.perform(MockMvcRequestBuilders.get("/professores")
-                        //.with(SecurityMockMvcRequestPostProcessors.jwt())
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
@@ -139,7 +139,7 @@ class ProfessorControllerTest {
 
         // Execução da requisição POST para salvar o professor
         mockMvc.perform(MockMvcRequestBuilders.post("/professores")
-                       // .with(SecurityMockMvcRequestPostProcessors.jwt())
+                       .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());

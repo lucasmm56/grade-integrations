@@ -9,7 +9,6 @@ import br.edu.imepac.professores.models.repository.ProfessorRepository;
 import br.edu.imepac.professores.models.services.interfaces.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

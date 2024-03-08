@@ -11,7 +11,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.Arrays;
 import java.util.Collections;
 
-
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {

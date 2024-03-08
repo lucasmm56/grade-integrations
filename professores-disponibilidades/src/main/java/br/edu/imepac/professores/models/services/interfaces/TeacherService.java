@@ -6,7 +6,6 @@ import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import java.util.List;
 
 public interface TeacherService {
-
     ProfessorResponseDTO createTeacher(ProfessorRequestDTO professorRequest);
     ProfessorResponseDTO updateTeacher(Long id, ProfessorRequestDTO professorRequest);
     List<ProfessorResponseDTO> listTeachers();
