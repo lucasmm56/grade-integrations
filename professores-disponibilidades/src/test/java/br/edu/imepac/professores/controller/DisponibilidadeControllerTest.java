@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -42,7 +43,7 @@ class DisponibilidadeControllerTest {
         when(disponibilidadeService.listDisponibilidades()).thenReturn(expectedResponse);
 
         // Execução da requisição GET para listar as disponibilidades
-        mockMvc.perform(MockMvcRequestBuilders.get("/disponibilidades"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/disponibilidades").with(SecurityMockMvcRequestPostProcessors.jwt()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].diaSemana").value("Segunda-feira"))
@@ -78,6 +79,7 @@ class DisponibilidadeControllerTest {
 
         // Execução da requisição POST para salvar a disponibilidade
         mockMvc.perform(MockMvcRequestBuilders.post("/disponibilidades")
+                        .with(SecurityMockMvcRequestPostProcessors.jwt())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(requestDTO)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -94,7 +96,7 @@ class DisponibilidadeControllerTest {
         when(disponibilidadeService.listDisponibilidades()).thenReturn(new ArrayList<>());
 
         // Execução da requisição GET para listar as disponibilidades
-        mockMvc.perform(MockMvcRequestBuilders.get("/disponibilidades"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/disponibilidades").with(SecurityMockMvcRequestPostProcessors.jwt()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
     }
