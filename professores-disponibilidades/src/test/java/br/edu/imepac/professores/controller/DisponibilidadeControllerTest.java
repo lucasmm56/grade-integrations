@@ -6,7 +6,6 @@ import br.edu.imepac.professores.dto.response.DisponibilidadeCreateResponseDTO;
 import br.edu.imepac.professores.dto.response.ProfessorCreateDisponibilidadeResponseDTO;
 import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import br.edu.imepac.professores.models.services.DisponibilidadeService;
-import br.edu.imepac.professores.models.services.ProfessorService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;

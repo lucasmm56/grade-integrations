@@ -6,22 +6,23 @@ import br.edu.imepac.professores.dto.response.ProfessorResponseDTO;
 import br.edu.imepac.professores.models.entities.Disponibilidade;
 import br.edu.imepac.professores.models.entities.Professor;
 import br.edu.imepac.professores.models.repository.ProfessorRepository;
+import br.edu.imepac.professores.models.services.interfaces.TeacherService;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProfessorService {
-    private ProfessorRepository professorRepository;
+public class TeacherManagementService implements TeacherService {
+    private final ProfessorRepository professorRepository;
 
-    public ProfessorService(ProfessorRepository professorRepository){
+    public TeacherManagementService(ProfessorRepository professorRepository){
         this.professorRepository = professorRepository;
     }
 
-    public ProfessorResponseDTO cadastrarProfessor(ProfessorRequestDTO requestDTO) {
+    @Override
+    public ProfessorResponseDTO createTeacher(ProfessorRequestDTO requestDTO) {
         Professor professor = new Professor();
         professor.setNome(requestDTO.getNome());
         professor.setEmail(requestDTO.getEmail());
@@ -36,7 +37,8 @@ public class ProfessorService {
         return responseDTO;
     }
 
-    public ProfessorResponseDTO editarProfessor(Long id, ProfessorRequestDTO professorRequestDTO){
+    @Override
+    public ProfessorResponseDTO updateTeacher(Long id, ProfessorRequestDTO professorRequestDTO) {
         Optional<Professor> optionalProfessor = Optional.ofNullable(this.findById(id));
         if(optionalProfessor.isPresent()){
             Professor professor = optionalProfessor.get();
@@ -54,11 +56,29 @@ public class ProfessorService {
         }
     }
 
-    public List<ProfessorResponseDTO> listarProfessores() {
+    @Override
+    public List<ProfessorResponseDTO> listTeachers() {
         List<Professor> professores = professorRepository.findAll();
         return professores.stream()
                 .map(this::converterProfessorParaDTO)
                 .toList();
+    }
+
+    @Override
+    public ProfessorResponseDTO findTeacherById(Long id){
+        Professor professor = this.findById(id);
+        ProfessorResponseDTO professorResponse = new ProfessorResponseDTO();
+        professorResponse.setId(professor.getId());
+        professorResponse.setNome(professor.getNome());
+        professorResponse.setEmail(professor.getEmail());
+        professorResponse.setDisponibilidades(this.getDisponibilidadesDTO(professor));
+        return professorResponse;
+    }
+
+    @Override
+    public void deleteTeacher(Long id){
+        Professor professor = this.findById(id);
+        professorRepository.delete(professor);
     }
 
     private ProfessorResponseDTO converterProfessorParaDTO(Professor professor) {
@@ -88,21 +108,6 @@ public class ProfessorService {
                 .stream()
                 .map(this::converterDisponibilidadeParaDTO)
                 .toList();
-    }
-
-    public ProfessorResponseDTO findTeacherById(Long id){
-        Professor professor = this.findById(id);
-        ProfessorResponseDTO professorResponse = new ProfessorResponseDTO();
-        professorResponse.setId(professor.getId());
-        professorResponse.setNome(professor.getNome());
-        professorResponse.setEmail(professor.getEmail());
-        professorResponse.setDisponibilidades(this.getDisponibilidadesDTO(professor));
-        return professorResponse;
-    }
-
-    public void deleteTeacher(Long id){
-        Professor professor = this.findById(id);
-        professorRepository.delete(professor);
     }
 
 }

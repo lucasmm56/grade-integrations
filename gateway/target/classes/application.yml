@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: apiRoute
+          uri: http://localhost:80/api
+          predicates:
+            - Path=/api/**
+        - id: keycloak
+          uri: http://localhost:8080
+          predicates:
+            - Path=/auth/**
+          filters:
+            - RewritePath=/auth/(?<path>.*), /$\{path}
+      default-filters:
+        - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          app_professores:
+            provider: keycloak
+            client-id: app_professores
+            client-secret: G1wRySOi9VGUsUE5hXPuACncwEr1eLxR
+            scope:
+              - openid
+              - profile
+              - email
+              - roles
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/imepac

@@ -2,6 +2,7 @@ package br.edu.imepac.professores.integrationtests.swagger;
 
 import br.edu.imepac.professores.config.TestConfigs;
 import br.edu.imepac.professores.integrationtests.testescontainers.AbstractIntegrationTest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@Slf4j
 public class SwaggerIntegrationTest  extends AbstractIntegrationTest {
 
     @Test
@@ -25,6 +27,7 @@ public class SwaggerIntegrationTest  extends AbstractIntegrationTest {
                 .extract()
                 .body()
                 .asString();
+       log.info("The content is {}", content);
        assertTrue(content.contains("Swagger UI"));
     }
 }

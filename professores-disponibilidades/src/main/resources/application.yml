@@ -22,8 +22,6 @@ spring:
   messages:
     encoding: UTF-8
     basename:
-  config:
-    import: optional:file:.env[.properties]
   flyway:
     enabled: true
     locations: classpath:db/migrations
@@ -37,8 +35,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8080/realms/imepac
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
-
+          jwk-set-uri: http://localhost:8080/realms/imepac/protocol/openid-connect/certs
 flyway:
   url: jdbc:mysql://localhost:3306/professores
   user: root
